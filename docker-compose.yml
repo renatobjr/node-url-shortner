@@ -1,0 +1,119 @@
+version: "3.7"
+
+networks:
+  url-shortener:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.20.199.1
+          gateway: 172.20.199.1
+
+services:
+  # Database
+  database:
+    container_name: database
+    image: mysql:8.4.2
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./db:/docker-entrypoint-initdb.d
+      - ./url-shortend-data:/var/lib/mysql
+    env_file:
+      - ./envs/.env_mysql
+    networks:
+      url-shortner:
+        ipv4_address: 172.20.199.2
+        aliases:
+          - database
+
+  # Database Test
+  database-test:
+    container_name: database-test
+    image: mysql:8.4.2
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./db:/docker-entrypoint-initdb.d
+      - ./url-shortend-data-test:/var/lib/mysql
+    env_file:
+      - ./envs/.env_mysql
+    networks:
+      url-shortner:
+        ipv4_address: 172.20.199.3
+        aliases:
+          - database-test
+
+  # Auth Service
+  auth-service:
+    container_name: auth-service
+    build:
+      context: .
+      dockerfile: docker/auth_service.Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./services/auth-service:/var/www/auth-service
+    links:
+      - database
+    depends_on:
+      - database
+    env_file:
+      - ./envs/.env_node
+      - ./envs/.env_secret
+      - ./envs/.env_auth
+      - ./envs/.env_mysql
+    networks:
+      url-shortner:
+        ipv4_address: 172.20.199.4
+        aliases:
+          - auth-service
+
+  # Link Service
+  link-service:
+    container_name: link-service
+    build:
+      context: .
+      dockerfile: docker/link_service.Dockerfile
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./services/link-service:/var/www/link-service
+    links:
+      - database
+    depends_on:
+      - database
+    env_file:
+      - ./envs/.env_node
+      - ./envs/.env_secret
+      - ./envs/.env_link
+      - ./envs/.env_mysql
+    networks:
+      url-shortner:
+        ipv4_address: 172.20.199.5
+        aliases:
+          - link-service
+
+  # Redirect Service
+  redirect-service:
+    container_name: redirect-service
+    build:
+      context: .
+      dockerfile: docker/redirect_service.Dockerfile
+    ports:
+      - "3002:3002"
+    volumes:
+      - ./services/redirect-service:/var/www/redirect-service
+    links:
+      - database
+    depends_on:
+      - database
+    env_file:
+      - ./envs/.env_node
+      - ./envs/.env_redirect
+      - ./envs/.env_mysql
+    networks:
+      url-shortner:
+        ipv4_address: 172.20.199.6
+        aliases:
+          - redirect-service

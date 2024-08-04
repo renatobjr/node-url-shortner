@@ -1,0 +1,23 @@
+# node_modules
+/node_modules
+/services/auth_service/node_modules
+/services/link_service/node_modules
+/services/redirect_service/node_modules
+
+# Dist
+/services/auth_service/dist
+/services/link_service/dist
+/services/redirect_service/dist
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Databases mysql
+/url-shortend-data
+/url-shortend-data-test
+
+# Env files
+/envs/*
