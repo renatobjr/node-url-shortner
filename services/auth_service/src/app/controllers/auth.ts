@@ -23,7 +23,13 @@ const register: Handler = async (req, res) => {
 	res.reply(result.httpCode, result.data);
 };
 
+const verify: Handler = async (req, res) => {
+	const result = await auth.verify(req.params.token);
+	res.reply(result.httpCode, result.data);
+};
+
 export default {
 	login,
 	register,
+	verify,
 };
