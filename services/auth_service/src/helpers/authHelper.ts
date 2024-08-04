@@ -20,7 +20,14 @@ const authHelper = {
 
 	validateToken: (token: string) => {
 		if (token != undefined) {
-			return jwt.verify(token, secretKey);
+			try {
+				let formatToken = token.replace("Bearer ", "");
+				return jwt.verify(formatToken, secretKey);
+			} catch (error) {
+				return {
+					data: false,
+				};
+			}
 		}
 
 		return false;
