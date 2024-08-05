@@ -90,15 +90,16 @@ NODE_ENV=development
 
 - `.env_redirect`
 
-````bash
+```bash
 NODE_PORT=3002
 AUTH_SERVICE=http://172.20.199.4:3000/api/v1/auth
+```
 
 - `.env_secret`
 
 ```bash
 JWT_SECRET=your-strong-jwt-secret
-````
+```
 
 2. Start the container for the firts time to install NPM dependencies:
 
