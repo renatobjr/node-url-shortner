@@ -7,7 +7,7 @@ export const apiDocs = {
 	},
 	servers: [
 		{
-			url: "http://localhost:3000/api",
+			url: "http://localhost:3000/api/v1/auth",
 			description: "Servidor local",
 		},
 	],
@@ -108,6 +108,46 @@ export const apiDocs = {
 							"application/json": {
 								schema: {
 									$ref: "#/components/schemas/DefaultResponse",
+								},
+							},
+						},
+					},
+					"500": {
+						description: "Erro no servidor",
+						content: {
+							"application/json": {
+								schema: {
+									$ref: "#/components/schemas/DefaultResponse",
+								},
+							},
+						},
+					},
+				},
+			},
+			"post/:token": {
+				summary: "Valida um token",
+				description:
+					"Valida se um token ainda é válido ou se esta corretamento formado.",
+				tags: ["Autenticação"],
+				requestBody: {
+					required: true,
+					content: {
+						schema: {
+							type: "object",
+							properties: {
+								token: "string",
+								description: "Token de autenticaçào para validação",
+							},
+						},
+					},
+				},
+				responses: {
+					"200": {
+						description: "Token válidado com sucesso",
+						content: {
+							"application/json": {
+								schema: {
+									$ref: "#/components/schemas/Object",
 								},
 							},
 						},

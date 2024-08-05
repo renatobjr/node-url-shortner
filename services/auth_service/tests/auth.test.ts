@@ -62,7 +62,7 @@ describe("GET /auth", () => {
 			.send(loginRightPayload);
 
 		expect(response.statusCode).toEqual(200);
-		expect(typeof response.body.data.token).toBe("string");
+		expect(typeof response.body.response.token).toBe("string");
 	});
 
 	test("Should be return a error with wrong email", async () => {

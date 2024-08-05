@@ -5,7 +5,7 @@
 	"scripts": {
 		"dev": "nodemon",
 		"jest": "jest --watchAll --detectOpenHandles",
-		"test": "docker exec auth_service npm run jest"
+		"test": "docker exec auth-service npm run jest"
 	},
 	"keywords": [],
 	"author": "Renato Ribeiro",
