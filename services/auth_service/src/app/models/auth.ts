@@ -101,7 +101,26 @@ const register = async (
 	}
 };
 
+const verify = async (
+	token: string,
+): Promise<ResponseType<Object | boolean>> => {
+	try {
+		const isAuth = authHelper.validateToken(token);
+
+		return {
+			data: isAuth,
+			httpCode: 200,
+		};
+	} catch (error) {
+		return {
+			data: error,
+			httpCode: 500,
+		};
+	}
+};
+
 export default {
 	login,
 	register,
+	verify,
 };
