@@ -25,7 +25,7 @@ A simple microservice app to manage and short URL's. The system is architected w
   http://localhost:3001
 ```
 
-3. Redirect Service: rsponsável pelo redirecionamento de links encurtados para a URL original inclusive contabilizando os acessos, running on:
+3. Redirect Service: Responsible for redirecting shortened links to the original URL, including counting access, running on:
 
 ```bash
   http://localhost:3002
@@ -50,7 +50,7 @@ For fisrt time running the follow the instructions:
 - Update/create your envs files on root directory project:
 
 ```bash
-/envs
+mkdir /envs
 ```
 
 These files are responsible for injecting variables of type env for each service executed. For each service it is necessary to create configuration files according to the following examples, remenber to check the right filename section `env_file` on `docker-compose.yml`:
@@ -90,17 +90,15 @@ NODE_ENV=development
 
 - `.env_redirect`
 
-```bash
+````bash
 NODE_PORT=3002
 AUTH_SERVICE=http://172.20.199.4:3000/api/v1/auth
-LINK_SERVICE=http://172.20.199.4:3001/api/v1/link
-```
 
 - `.env_secret`
 
 ```bash
-JWT_SECRET=UqgDHJSFIQeGxuFYuU4TWgIX4qquy0HU
-```
+JWT_SECRET=your-strong-jwt-secret
+````
 
 2. Start the container for the firts time to install NPM dependencies:
 
