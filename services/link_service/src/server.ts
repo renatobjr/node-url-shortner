@@ -15,7 +15,7 @@ app
 	.use(bodyParser.json())
 	.use(express.urlencoded({ extended: true }))
 	.use(linkRoute)
-	.use("/docs", swaggerUi.serve, swaggerUi.setup(apiDocs));
+	.use("/swagger/docs", swaggerUi.serve, swaggerUi.setup(apiDocs));
 
 app.get("/", async (req, res) => {
 	res.json({ message: "API is online" });
