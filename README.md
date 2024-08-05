@@ -101,7 +101,7 @@ AUTH_SERVICE=http://172.20.199.4:3000/api/v1/auth
 JWT_SECRET=your-strong-jwt-secret
 ```
 
-2. Start the container for the firts time to install NPM dependencies:
+2. Start the container for the firts time to install NPM dependencies (in some cases it's necessaty stop de MySQL service on GNU/Linux environment):
 
 ```bash
 docker compose run auth-service npm ci
@@ -151,9 +151,122 @@ docker exec link-service npm run jest
 
 ```bash
 docker exec redirect-service npm run jest
+
 ```
 
-## Reading the Docs
+## How to use:
+
+This project is an API to create, manage and redirect minified links to their original versions, allowing logged in users some extra actions, remember that to use and verify its operation, in addition to testing and reading the documentation, it is recommended to use a tool to create HTTP requests like Postman or Insomnia according to the following standards:
+
+1. Auth Services: Allows the creation of a new user and the authentication process as described below:
+
+```bash
+POST http://localhost:3000/api/v1/auth
+
+Request Payload:
+{
+  "name": "URL Shortner",
+  "email": "url-shortner@null.net",
+  "password": "123"
+}
+
+Response (201):
+{
+  "response": "resource created",
+  "url": "/api/v1/auth",
+  "date": "2024-08-05T12:01:32.864Z"
+}
+```
+
+```bash
+GET http://localhost:3000/api/v1/auth
+
+Request Payload:
+{
+  "email": "url-shortner@null.net",
+  "password": "123"
+}
+
+Response (200):
+{
+  "response": {
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJyZW5hdG8uYm9uZmltLmpyQGNjaWFvLm9yZyIsImlhdCI6MTcyMjg1OTQwMCwiZXhwIjoxNzIyODYzMDAwfQ.nAXz3iY4c76VKJ5yxfrnuj_efw2xJys6DCbjcQeOeV4"
+  },
+  "url": "/api/v1/auth",
+  "date": "2024-08-05T12:03:20.097Z"
+}
+```
+
+2. Link Service: Allows the creation, listing, editing and deletion of Links for their short versions with some restrictions:
+
+- Any user (with or without authentication) can create new links. For logged users it's necessary send a request header with a Bearer Token;
+- Only logged in users can list, edit and delete links created by themselves sent in the request header a Bearer Token;
+
+```bash
+POST http://localhost:3001/api/v1/link?original_url=https://github.com/renatobjr/node-url-shortner
+
+Response (201):
+{
+  "response": "http://172.20.199.6:3002/opKER",
+  "url": "/api/v1/link?original_url=https://github.com/renatobjr/node-url-shortner",
+  "date": "2024-08-05T12:15:54.249Z"
+}
+```
+
+```bash
+GET http://localhost:3001/api/v1/link
+
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJyZW5hdG8uYm9uZmltLmpyQGNjaWFvLm9yZyIsImlhdCI6MTcyMjg2MDMyMywiZXhwIjoxNzIyODYzOTIzfQ.WntTXj6ssKUL7Dw5MlBWtWEyN-e02gb2w5oQ0R4ZZgA
+
+Response (200):
+{
+  "response": [
+    {
+      "id": 2,
+      "original_url": "https://github.com/renatobjr/node-url-shortner",
+      "short_url": "http://172.20.199.6:3002/LgRZG",
+      "user_id": 1,
+      "total_clicks": 0,
+      "created_at": "2024-08-05T12:17:42.000Z",
+      "updated_at": "2024-08-05T12:17:42.000Z",
+      "deleted_at": null
+    }
+  ],
+  "url": "/api/v1/link",
+  "date": "2024-08-05T12:19:00.485Z"
+}
+```
+
+```bash
+PUT http://localhost:3001/api/v1/link/:id
+
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJyZW5hdG8uYm9uZmltLmpyQGNjaWFvLm9yZyIsImlhdCI6MTcyMjg2MDMyMywiZXhwIjoxNzIyODYzOTIzfQ.WntTXj6ssKUL7Dw5MlBWtWEyN-e02gb2w5oQ0R4ZZgA
+
+Request Payload:
+{
+  "original_url": "https://www.google.com/"
+}
+
+Response (204)
+```
+
+```bash
+DELETE http://localhost:3001/api/v1/link/:id
+
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJyZW5hdG8uYm9uZmltLmpyQGNjaWFvLm9yZyIsImlhdCI6MTcyMjg2MDMyMywiZXhwIjoxNzIyODYzOTIzfQ.WntTXj6ssKUL7Dw5MlBWtWEyN-e02gb2w5oQ0R4ZZgA
+
+Response (204)
+```
+
+3. Redirect Service: Allows redirection to the original URL from a link generated in Link service.
+
+```bash
+GET http://172.20.199.6:3002/LgRZG
+
+Response (200)
+```
+
+## Reading the Docs:
 
 Swagger provides separate documentation for each service, use URL `/swagger/docs` to access.
 
