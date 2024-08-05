@@ -169,3 +169,8 @@ https://github.com/renatobjr/zabbix-docker
 
 4. Implement a `makefile.sh` to generate all dependencies and execute docker commands in a unified way;
 5. Create packages to reduce code load, such as the types used to standardize service response.
+
+## Total development time:
+
+Visit the link below for insights and time spent on the project
+[WakaTime](https://wakatime.com/@018d32aa-d099-41cb-a39c-4049bdbd1c8c/projects/loiiksaydh?start=2024-07-30&end=2024-08-05)
