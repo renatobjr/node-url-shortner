@@ -2,7 +2,7 @@ import axios from "axios";
 
 interface DecodedToken {
 	data?: boolean;
-	id: number;
+	id: string;
 	email: string;
 }
 
@@ -11,7 +11,7 @@ const linkHelpers = {
 		return axios
 			.post(`${process.env.AUTH_SERVICE}/${token}`)
 			.then((res) => {
-				return res.data.body;
+				return res.data.response;
 			})
 			.catch((err) => {
 				return {

@@ -18,9 +18,10 @@ interface Link {
 	deleted_at: Date;
 }
 
-const getLink = async (id: string): Promise<Link> => {
+const getLink = async (id: string, userId: string): Promise<Link> => {
 	const link: Link = await db(linkTable)
 		.where(LinkSchema.id, id)
+		.andWhere(LinkSchema.user_id, userId)
 		.andWhere(LinkSchema.deleted_at, null)
 		.first();
 
@@ -38,7 +39,7 @@ const create = async (
 		if (token != "no_token") userData = await linkHelpers.isAuth(token);
 
 		if (userData?.data == false)
-			return { data: "invalida token", httpCode: 401 };
+			return { data: "invalid token", httpCode: 401 };
 
 		await db(linkTable).insert({
 			original_url: payload.original_url,
@@ -58,8 +59,10 @@ const create = async (
 	}
 };
 
-const list = async (userId: number): Promise<ResponseType<LinkDocument[]>> => {
-	const list: Link[] = await db(linkTable).where(LinkSchema.user_id, userId);
+const list = async (userId: string): Promise<ResponseType<LinkDocument[]>> => {
+	const list: Link[] = await db(linkTable)
+		.where(LinkSchema.user_id, userId)
+		.andWhere(LinkSchema.deleted_at, null);
 
 	return {
 		data: list,
@@ -69,10 +72,11 @@ const list = async (userId: number): Promise<ResponseType<LinkDocument[]>> => {
 
 const update = async (
 	linkId: string,
+	userId: string,
 	payload: LinkDocument,
 ): Promise<ResponseType<DefaultResponse>> => {
 	try {
-		const hasLink: Link = await getLink(linkId);
+		const hasLink: Link = await getLink(linkId, userId);
 		if (!hasLink) return { data: "resource not found", httpCode: 404 };
 
 		let updateData: LinkDocument = {
@@ -80,7 +84,11 @@ const update = async (
 			updated_at: new Date(),
 		};
 
-		await db(linkTable).update(updateData).where(LinkSchema.id, linkId);
+		await db(linkTable)
+			.update(updateData)
+			.where(LinkSchema.id, linkId)
+			.andWhere(LinkSchema.user_id, userId)
+			.andWhere(LinkSchema.deleted_at, null);
 
 		return {
 			data: "resource updated",
@@ -96,18 +104,19 @@ const update = async (
 
 const remove = async (
 	linkId: string,
+	userId: string,
 ): Promise<ResponseType<DefaultResponse>> => {
 	try {
-		const hasLink: Link = await getLink(linkId);
+		const hasLink: Link = await getLink(linkId, userId);
 		if (!hasLink) return { data: "resource not found", httpCode: 404 };
 
 		await db(linkTable)
-			.update(LinkSchema.deleted_at, Date.now())
+			.update(LinkSchema.deleted_at, new Date())
 			.where(LinkSchema.id, linkId);
 
 		return {
 			data: "resource removed",
-			httpCode: 200,
+			httpCode: 204,
 		};
 	} catch (error) {
 		return {
