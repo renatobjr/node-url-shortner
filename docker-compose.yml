@@ -85,7 +85,6 @@ services:
       - database
     env_file:
       - ./envs/.env_node
-      - ./envs/.env_secret
       - ./envs/.env_link
       - ./envs/.env_mysql
     networks:
