@@ -36,7 +36,7 @@ jobs:
 
       # Step to run tests
       - name: Run tests in Docker
-        run: docker-compose exec auth-service npm test
+        run: docker exec auth-service npm run jest 
 
       # Step to shut down containers
       - name: Shut down Docker containers
