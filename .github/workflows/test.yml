@@ -17,6 +17,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
       # Step to set up Docker
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
@@ -29,7 +34,7 @@ jobs:
 
       # Step to build and start containers
       - name: Build and start containers
-        run: docker-compose -f docker-compose.yml up -d --build
+        run: docker-compose -d --build
 
        # Step to run npm install inside the container
       - name: Install dependencies in auth-service
