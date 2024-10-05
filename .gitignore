@@ -18,3 +18,8 @@ pnpm-debug.log*
 # Databases mysql
 /url-shortend-data
 /url-shortend-data-test
+
+# Teste Coverage
+/services/auth_service/coverage
+/services/link_service/coverage
+/services/redirect_service/coverage

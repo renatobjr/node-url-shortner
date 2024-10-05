@@ -4,7 +4,7 @@
 	"main": "index.js",
 	"scripts": {
 		"dev": "nodemon",
-		"jest": "jest --ci --coverage",
+		"jest": "jest --ci --coverage --detectOpenHandles --forceExit",
 		"test": "docker exec auth-service npm run jest"
 	},
 	"keywords": [],
