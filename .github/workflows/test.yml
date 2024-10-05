@@ -44,4 +44,3 @@ jobs:
 
       - name: Shut down Docker containers
         run: docker-compose down
-
