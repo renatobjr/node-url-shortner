@@ -3,7 +3,7 @@ name: CI Pipeline with GitHub Secrets
 on:
   push:
     branches:
-      - develop
+      - main
 
 jobs:
   build:
@@ -12,21 +12,32 @@ jobs:
     env:
       MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
       MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
-      JWT_SECRET: ${{ secrets.JWT_SECRET }}
-      NODE_ENV: test
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Docker Build
+      # Step to set up Docker
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      # Step to install Docker Compose
+      - name: Install Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install docker-compose -y
+
+      # Step to build and start containers
+      - name: Build and start containers
         run: docker-compose -f docker-compose.yml up -d --build
 
       - name: Wait for services to be ready
         run: sleep 20
 
+      # Step to run tests
       - name: Run tests in Docker
         run: docker-compose exec auth-service npm test
 
+      # Step to shut down containers
       - name: Shut down Docker containers
         run: docker-compose down
