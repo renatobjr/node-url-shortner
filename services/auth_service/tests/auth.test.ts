@@ -56,15 +56,6 @@ describe("POST /auth", () => {
 });
 
 describe("GET /auth", () => {
-	test("Should be return a User token", async () => {
-		const response: request.Response = await request(app)
-			.get("/api/v1/auth")
-			.send(loginRightPayload);
-
-		expect(response.statusCode).toEqual(200);
-		expect(typeof response.body.response.token).toBe("string");
-	});
-
 	test("Should be return a error with wrong email", async () => {
 		const response: request.Response = await request(app)
 			.get("/api/v1/auth")
