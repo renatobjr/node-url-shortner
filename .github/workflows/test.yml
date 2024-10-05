@@ -20,33 +20,34 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20'
+          node-version: "20"
 
-      # Step to set up Docker
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      # Step to install Docker Compose
       - name: Install Docker Compose
         run: |
           sudo apt-get update
           sudo apt-get install docker-compose -y
 
-      # Step to build and start containers
       - name: Build and start containers
         run: docker compose up -d --build
 
-       # Step to run npm install inside the container
-      - name: Install dependencies in auth-service
-        run: docker exec auth-service npm install 
+      - name: Install dependencies in containers
+        run: docker exec auth-service npm install && docker exec link-service npm install && docker exec redirect-service npm install
 
       - name: Wait for services to be ready
         run: sleep 20
 
-      # Step to run tests
-      - name: Run tests in Docker
-        run: docker exec auth-service npm run jest 
+      - name: Run tests in Auth service
+        run: docker exec auth-service npm run jest
 
-      # Step to shut down containers
+      - name: Run tests in Link service
+        run: docker exec link-service npm run jest
+
+      - name: Run tests in Redirect service
+        run: docker exec redirect-service npm run jest
+
       - name: Shut down Docker containers
         run: docker-compose down
+

@@ -4,7 +4,7 @@
 	"main": "index.js",
 	"scripts": {
 		"dev": "nodemon",
-		"jest": "jest --watchAll --detectOpenHandles",
+		"jest": "jest --ci --coverage --detectOpenHandles --forceExit",
 		"test": "docker exec redirect_service npm run jest"
 	},
 	"keywords": [],
