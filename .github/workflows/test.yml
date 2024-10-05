@@ -34,7 +34,7 @@ jobs:
 
       # Step to build and start containers
       - name: Build and start containers
-        run: docker-compose -d --build
+        run: docker compose up -d --build
 
        # Step to run npm install inside the container
       - name: Install dependencies in auth-service
