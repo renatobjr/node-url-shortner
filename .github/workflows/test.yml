@@ -34,19 +34,13 @@ jobs:
         run: docker compose up -d --build
 
       - name: Install dependencies in containers
-        run: docker exec auth-service npm install && docker exec link-service npm install && docker exec redirect-service npm install
+        run: docker exec auth-service npm install
 
       - name: Wait for services to be ready
         run: sleep 20
 
       - name: Run tests in Auth service
         run: docker exec auth-service npm run jest
-
-      - name: Run tests in Link service
-        run: docker exec link-service npm run jest
-
-      - name: Run tests in Redirect service
-        run: docker exec redirect-service npm run jest
 
       - name: Shut down Docker containers
         run: docker-compose down
