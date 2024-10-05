@@ -31,6 +31,10 @@ jobs:
       - name: Build and start containers
         run: docker-compose -f docker-compose.yml up -d --build
 
+       # Step to run npm install inside the container
+      - name: Install dependencies in auth-service
+        run: docker-compose exec auth-service npm install
+
       - name: Wait for services to be ready
         run: sleep 20
 
