@@ -18,6 +18,3 @@ pnpm-debug.log*
 # Databases mysql
 /url-shortend-data
 /url-shortend-data-test
-
-# Env files
-/envs/*

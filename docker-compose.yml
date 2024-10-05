@@ -20,7 +20,7 @@ services:
       - ./db:/docker-entrypoint-initdb.d
       - ./url-shortend-data:/var/lib/mysql
     env_file:
-      - ./envs/.env_mysql
+      - ./envs/mysql.env
     networks:
       url-shortner:
         ipv4_address: 172.20.199.2
@@ -37,7 +37,7 @@ services:
       - ./db:/docker-entrypoint-initdb.d
       - ./url-shortend-data-test:/var/lib/mysql
     env_file:
-      - ./envs/.env_mysql
+      - ./envs/mysql.env
     networks:
       url-shortner:
         ipv4_address: 172.20.199.3
@@ -59,10 +59,10 @@ services:
     depends_on:
       - database
     env_file:
-      - ./envs/.env_node
-      - ./envs/.env_secret
-      - ./envs/.env_auth
-      - ./envs/.env_mysql
+      - ./envs/node.env
+      - ./envs/secret.env
+      - ./envs/auth.env
+      - ./envs/mysql.env
     networks:
       url-shortner:
         ipv4_address: 172.20.199.4
@@ -84,9 +84,9 @@ services:
     depends_on:
       - database
     env_file:
-      - ./envs/.env_node
-      - ./envs/.env_link
-      - ./envs/.env_mysql
+      - ./envs/node.env
+      - ./envs/link.env
+      - ./envs/mysql.env
     networks:
       url-shortner:
         ipv4_address: 172.20.199.5
@@ -108,9 +108,9 @@ services:
     depends_on:
       - database
     env_file:
-      - ./envs/.env_node
-      - ./envs/.env_redirect
-      - ./envs/.env_mysql
+      - ./envs/node.env
+      - ./envs/redirect.env
+      - ./envs/mysql.env
     networks:
       url-shortner:
         ipv4_address: 172.20.199.6
